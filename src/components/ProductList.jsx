@@ -1,23 +1,37 @@
 import React from 'react'
 import ProductCard from './ProductCard'
 
-// Sample product data (for display purposes only)
+// Exported so tests can import ids
 export const sampleProducts = [
-  { id: 1, name: 'Apple', price: '$1.00', category: 'Fruits', inStock: true },
-  { id: 2, name: 'Milk', price: '$2.50', category: 'Dairy', inStock: false }
+  { id: 'apple',  name: 'Apple',  category: 'Fruits' },
+  { id: 'banana', name: 'Banana', category: 'Fruits' },
+  { id: 'milk',   name: 'Milk',   category: 'Dairy' },
+  { id: 'cheese', name: 'Cheese', category: 'Dairy' },
 ]
 
-const ProductList = () => {
-  return (
-    <div>
-      <h2>Available Products</h2>
+const ProductList = ({ category = 'all', onAddToCart, products = sampleProducts }) => {
+  const visible =
+    category === 'all' ? products : products.filter(p => p.category === category)
 
-      {/* TODO: Filter sample data using selected category */}
-      {sampleProducts.map((product) => (
-        <ProductCard key={product.id} product={product} />
+  if (visible.length === 0) {
+    // EXACT text your test expects
+    return <p>No products available.</p>
+  }
+
+  return (
+    <div className="product-list">
+      {visible.map(product => (
+        <ProductCard
+          key={product.id}              // fixes the "unique key" warning
+          product={product}
+          onAddToCart={onAddToCart}
+        />
       ))}
     </div>
   )
 }
 
 export default ProductList
+
+
+
